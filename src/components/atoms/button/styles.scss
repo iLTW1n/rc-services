@@ -1,0 +1,27 @@
+.component-button {
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 4px;
+  padding: 8px 16px;
+  background-color: #FFF;
+  cursor: pointer;
+  font-weight: 500;
+
+  &--success {
+    border-color: green;
+    color: green;
+  }
+
+  &--error {
+    border-color: red;
+    color: red;
+  }
+
+  &--link {
+    color: #3094d5;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+  }
+
+
+}

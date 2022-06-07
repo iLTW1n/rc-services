@@ -1,0 +1,33 @@
+.molecules-service-card {
+  padding: 24px 0 0;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+
+  &__content {
+    padding: 0 24px;
+    margin-bottom: 40px;
+  }
+
+  &__title {
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  &__description {
+    line-height: 18px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  &__actions {
+    border-top: 1px solid rgba(0, 0, 0, .2);
+    margin-top: auto;
+    padding: 16px 24px;
+    background-color: rgba(0, 0, 0, .08);
+    display: grid;
+    grid-template-columns: repeat(2, 64px);
+    grid-gap: 8px;
+  }
+}
