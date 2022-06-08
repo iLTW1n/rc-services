@@ -1,15 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, HTMLProps } from 'react';
 import cn from 'classnames';
 import './styles.scss';
 
-interface InputProps {
+interface InputProps extends Omit<HTMLProps<HTMLInputElement>, 'size' | 'onChange'> {
   label?: string;
-  onChange: (value: string) => void;
   size?: 'small' | 'default';
+  onChange: (value: string) => void;
 }
 
 const Input: FC<InputProps> = props => {
-  const { label, onChange, size } = props;
+  const { label, onChange, size, value } = props;
   const classnames = cn(['component-input', {
     [`component-input--${size}`]: !!size
   }]);
@@ -20,6 +20,7 @@ const Input: FC<InputProps> = props => {
         <span className='component-input__label'>{ label }</span>
       }
       <input
+        value={value}
         onChange={event => onChange(event.target.value)}
         className='component-input__input'
         type='text'

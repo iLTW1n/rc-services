@@ -1,18 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 
+import { FILTERS, DATA, DataProps } from 'toolbox/datasources';
+import { SessionKeys } from 'toolbox/constants';
 import { ServiceCard, ServiceForm } from 'components';
 import './styles.scss';
 
-const filters = [
-  { name: 'Todos', id: 'all' },
-  { name: 'Autos', id: 'cars' },
-  { name: 'Salud', id: 'health' },
-  { name: 'Hogar', id: 'home' }
-];
-
 const Home = () => {
-  const [activeFilter, setActiveFilter] = useState('all');
+  const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [serviceData, setServiceData] = useState<DataProps[]>([]);
+
+  const handleCreateService = (values: DataProps) => {
+    setServiceData([ ...serviceData, values])
+  };
+
+  const handleEditService = (values: DataProps) => {
+    const editedService = serviceData.map(service => {
+      if (service.id === values.id) return values;
+      return service;
+    })
+
+    setServiceData(editedService);
+  };
+
+  const handleDeleteService = (id: string) => {
+    const filtered = serviceData.filter(service => service.id !== id);
+    setServiceData(filtered);
+  }
+
+  const handleFilterServices = () => {
+    if (activeFilter !== 'all') {
+      return serviceData.filter(service => service.slug === activeFilter);
+    }
+
+    return serviceData;
+  }
+
+  useEffect(() => {
+    if (!sessionStorage.getItem(SessionKeys.Services)) {
+      sessionStorage.setItem(SessionKeys.Services, JSON.stringify(DATA));
+      setServiceData(DATA);
+    } else {
+      const serviceData = sessionStorage.getItem(SessionKeys.Services) as string;
+      setServiceData(JSON.parse(serviceData));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (serviceData.length) {
+      sessionStorage.setItem(SessionKeys.Services, JSON.stringify(serviceData));
+    }
+  }, [serviceData]);
 
   return (
     <div className='page-home'>
@@ -21,7 +59,7 @@ const Home = () => {
       </div>
       <div className='wrapper-container page-home__container-filters'>
         <div className='wrapper-content page-home__filters'>
-          { filters.map(filter => {
+          { FILTERS.map(filter => {
             return (
               <span
                 onClick={() => setActiveFilter(filter.id)}
@@ -40,14 +78,21 @@ const Home = () => {
       <div className='wrapper-container'>
         <div className='wrapper-content page-home__cards'>
           <div className='page-home__card-content'>
-            { filters.map((_, index) => {
-              return <ServiceCard key={index} />;
+            { handleFilterServices().map((service: DataProps) => {
+              return (
+                <ServiceCard
+                  key={service.id}
+                  onEdit={handleEditService}
+                  onDelete={handleDeleteService}
+                  { ...service }
+                />
+              );
             }) }
           </div>
           <div className='page-home__card-form'>
             <ServiceForm
               onClose={() => console.log(false)}
-              onAccept={() => console.log(false)}
+              onAccept={handleCreateService}
             />
           </div>
         </div>

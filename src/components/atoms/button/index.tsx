@@ -7,13 +7,13 @@ interface ButtonProps extends HTMLProps<HTMLButtonElement> {
 }
 
 const Button: FC<ButtonProps> = props => {
-  const { children, variant, onClick } = props;
+  const { children, variant, onClick, disabled } = props;
   const classnames = cn(['component-button', {
     [`component-button--${variant}`]: !!variant
   }]);
 
   return (
-    <button className={classnames} onClick={onClick}>
+    <button className={classnames} onClick={onClick} disabled={disabled}>
       { children }
     </button>
   );
